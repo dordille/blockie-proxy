@@ -13,10 +13,12 @@ router.get("/", async ctx => {
   }
 })
 
-router.get("/:address", async ctx => {
-  ctx.type = 'image/png'
-  console.log(ctx.params.address)
-  ctx.body = await createBlockie(ctx.params.address.toLowerCase(), 64)
+router.get("/:address.:format*", async ctx => {
+  const format = ctx.params.format || "png"
+  const scale = parseInt(ctx.query.scale) || 1
+
+  ctx.type = "image/png"
+  ctx.body = await createBlockie(ctx.params.address.toLowerCase(), scale)
 })
 
 app.use(router.routes())

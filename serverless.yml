@@ -1,5 +1,9 @@
 service: blockie-proxy
 
+custom:
+  stage: ${opt:stage, env:USER}
+  objectPrefix: '${self:service}-${self:custom.stage}'
+
 plugins:
   - serverless-apigwy-binary
 
@@ -18,3 +22,41 @@ functions:
           method: get
           path: /{seed}
           contentHandling: CONVERT_TO_BINARY
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        BinaryMediaTypes:
+          - "*~1*"
+    BlockieDistribution:
+      Type: 'AWS::CloudFront::Distribution'
+      Properties:
+        DistributionConfig:
+          DefaultCacheBehavior:
+            TargetOriginId: 'BlockieAPIOrigin'
+            ViewerProtocolPolicy: 'redirect-to-https'
+            DefaultTTL: 600
+            MaxTTL: 600
+            Compress: true
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: 'none'
+          DefaultRootObject: 'index.html'
+          Enabled: true
+          PriceClass: 'PriceClass_100'
+          HttpVersion: 'http2'
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: true
+          Origins:
+            - DomainName:
+               Fn::Join:
+                - ""
+                - - Ref: ApiGatewayRestApi
+                  - ".execute-api.${self:provider.region}.amazonaws.com"
+              Id: BlockieAPIOrigin
+              OriginPath: /${self:provider.stage}
+              CustomOriginConfig:
+                OriginProtocolPolicy: https-only

@@ -1,28 +1,16 @@
 const {createCanvas} = require("canvas")
 const {render} = require("ethereum-blockies")
 
-async function createBlockie(seed, size) {
+async function createBlockie(seed, scale) {
   return new Promise((resolve, reject) => {
-    const options = {}
-    switch(size) {
-      case 8:
-        options.size = 8
-        options.scale = 1
-        break
-      case 32:
-        options.size = 8
-        options.scale = 4
-        break
-      case 64:
-        options.size = 8
-        options.scale = 8
-        break
-      default:
-        return reject(new Error("Unsupported size"))
+    const options = {
+      size: 8,
+      scale: scale,
     }
     options.seed = seed
 
-    canvas = createCanvas(size, size)
+    const dim = options.size * options.scale
+    canvas = createCanvas(dim, dim)
     render(options, canvas)
 
     canvas.toBuffer((err, buf) => {
@@ -32,7 +20,7 @@ async function createBlockie(seed, size) {
 
       return resolve(buf)
     })
-  })  
+  })
 }
 
 module.exports = createBlockie

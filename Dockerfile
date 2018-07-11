@@ -1,13 +1,19 @@
-FROM amazonlinux
+FROM node:alpine
+ENV NODE_ENV=production
 
-RUN yum update -y && yum clean all
-RUN yum -y install tar gzip git zip
+WORKDIR /usr/src/app
+EXPOSE 1337
 
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
-RUN /bin/bash -c "source /root/.nvm/nvm.sh; nvm install v8.10.0"
-RUN /bin/bash -c "source /root/.nvm/nvm.sh; npm config set strict-ssl false"
+RUN apk add --update \
+	libc6-compat \
+    cairo-dev \
+    git \
+  && rm -rf /var/cache/apk/*
 
 COPY package*.json ./
-RUN /bin/bash -c "source /root/.nvm/nvm.sh; npm install"
+RUN npm install --only=production
 
 COPY . .
+
+
+CMD [ "npm", "start" ]

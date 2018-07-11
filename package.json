@@ -1,26 +1,24 @@
 {
   "name": "blockie-proxy",
+  "repository": "github:dordille/blockie-proxy",
   "version": "1.0.0",
   "description": "Proxy to render ethereum blockies",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "keywords": [
-    "ethereum",
-    "blockie"
-  ],
+  "main": "index.js",
+  "keywords": ["ethereum", "blockie"],
   "author": "Dan Ordille",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.0.0-alpha.12",
-    "ethereum-blockies": "github:ethereum/blockies",
     "koa": "^2.5.1",
     "koa-router": "^7.4.0",
-    "serverless-apigwy-binary": "^0.1.0"
+    "canvas": "^2.0.0-alpha.12",
+    "ethereum-blockies": "github:ethereum/blockies"
   },
   "devDependencies": {
     "prettier": "^1.13.7",
-    "serverless": "^1.28.0"
+    "serverless": "^1.28.0",
+    "serverless-apigwy-binary": "^0.1.0"
   }
 }
