@@ -1,8 +1,0 @@
-{
-  "resource": "/",
-  "path": "/",
-  "pathParameters": {
-  	"seed": "seed"
-  },
-  "httpMethod": "GET"
-}
