@@ -1,0 +1,20 @@
+service: blockie-proxy
+
+plugins:
+  - serverless-apigwy-binary
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+package:
+  artifact: dist/package.zip
+
+functions:
+  createBlockie:
+    handler: handler.createBlockie
+    events:
+      - http:
+          method: get
+          path: /{seed}
+          contentHandling: CONVERT_TO_BINARY
